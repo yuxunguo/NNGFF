@@ -140,13 +140,17 @@ if __name__ == "__main__":
     
 
     # Example parameter ranges
+    Output_Dir = "Output/DoubleDist"
+    extra_args = {"EbMin": 8.5, "EbMax": 11.0, "nEb": 5, "dtxsec": 0.25, "dtGFF": 0.2, "output_dir": f"{Output_Dir}"}
+    
+    
     param_ranges = {
-        "H_alpha": {"start": -0.5, "end": -0.2, "step": 0.3},
-        "H_beta": {"start": 5.0, "end": 6.0, "step": 1.0},
-        "H_norm": {"start": 1.0, "end": 2.0, "step": 1.0},  # Ag0
-        "H_m": {"start": 1.0, "end": 2.0, "step": 1.0},     # MAg
-        "D1": {"start": 0.5, "end": 1.0, "step": 0.5},     # Dg0
-        "mD1": {"start": 0.5, "end": 1.0, "step": 0.5}     # MDg
+        "H_alpha": {"start": -1.0, "end": -0.25, "step": 0.25},
+        "H_beta": {"start": 1.0, "end": 7.0, "step": 2.0},
+        "H_norm": {"start": 0.25, "end": 1.0, "step": 0.25},  # Ag0
+        "H_m": {"start": 0.5, "end": 2.5, "step": 1.0},     # MAg
+        "D1": {"start": -1.0, "end": 1.0, "step": 1.0},     # Dg0
+        "mD1": {"start": 0.5, "end": 2.5, "step": 1.0}     # MDg
     }
     
     param_values = {
@@ -158,9 +162,7 @@ if __name__ == "__main__":
         for k, v in param_ranges.items()
     }
 
-    Output_Dir = "Output/DoubleDist"
-    extra_args = {"EbMin": 8.5, "EbMax": 11.0, "nEb": 3, "dtxsec": 0.5, "dtGFF": 0.5, "output_dir": f"{Output_Dir}"}
-    
+
     if os.path.exists(Output_Dir):
         shutil.rmtree(Output_Dir)
     
