@@ -72,6 +72,7 @@ def G2(W: float, t: float, **kwargs):
             - 2* xi**2 * (HC.conjugate()*EC)
             -(xi**2 + t/(4* Mproton**2)) * EC.conjugate()*EC).real
 
+'''
 def generate_xsec(EbMin, EbMax, params, n=2, dt=1.0):
     Es = np.linspace(EbMin, EbMax, n)   # n points for W
     results = []
@@ -88,6 +89,16 @@ def generate_xsec(EbMin, EbMax, params, n=2, dt=1.0):
             G2WT = G2(W,t, **params).real
             results.append((E, t, G2WT))  # (W, t, F(W,t))
             
+    return results
+'''
+
+def generate_xsec(xsecpairs, params):
+    
+    results = []
+    for E, t in xsecpairs:
+        W = WEb(E)
+        G2WT = G2(W, t, **params).real
+        results.append((E, t, G2WT))  # (W, t, F(W,t))
     return results
 
 def generate_GFF(dtGFF, params):
@@ -106,14 +117,12 @@ def generate_GFF(dtGFF, params):
 def process_params(arg_tuple):
     
     i, params, extra_args, total_files = arg_tuple
-    EbMin = extra_args.get("EbMin")
-    EbMax = extra_args.get("EbMax")
-    nEb = extra_args.get("nEb")
-    dtxsec = extra_args.get("dtxsec")
+    
+    xsecpairs = extra_args.get("xsecpairs")
     dtGFF = extra_args.get("dtGFF")
     output_dir = extra_args.get("output_dir")
 
-    pairs_xsec = generate_xsec(EbMin, EbMax, params, n=nEb, dt=dtxsec)
+    pairs_xsec = generate_xsec(xsecpairs, params= params)    
     pairs_GFF = generate_GFF(dtGFF=dtGFF, params= params)
     # Compute number of digits for leading zeros
     num_digits = len(str(total_files))
@@ -138,12 +147,15 @@ def process_params(arg_tuple):
 
 if __name__ == "__main__":
     
+    dsigmadata = pd.read_csv("Diff_xsec_combined.csv")
+    pairs = list(zip(dsigmadata["avg_E"], -dsigmadata["avg_abs_t"]))
 
     # Example parameter ranges
     Output_Dir = "Output/DoubleDist"
-    extra_args = {"EbMin": 8.5, "EbMax": 11.0, "nEb": 5, "dtxsec": 0.25, "dtGFF": 0.2, "output_dir": f"{Output_Dir}"}
+    extra_args = {"xsecpairs": pairs, "dtGFF": 0.2, "output_dir": f"{Output_Dir}"}
     
-    
+    print(len(pairs))
+
     param_ranges = {
         "H_alpha": {"start": -1.0, "end": -0.25, "step": 0.25},
         "H_beta": {"start": 1.0, "end": 7.0, "step": 2.0},
@@ -162,13 +174,6 @@ if __name__ == "__main__":
         for k, v in param_ranges.items()
     }
 
-
-    if os.path.exists(Output_Dir):
-        shutil.rmtree(Output_Dir)
-    
-    os.makedirs(Output_Dir, exist_ok=True)
-    
-
     # Generate all combinations
     keys = list(param_values.keys())
     all_combinations = product(*(param_values[k] for k in keys))
@@ -185,7 +190,12 @@ if __name__ == "__main__":
     print(total_files)
     
     args_list = [(i, params, extra_args, total_files) for i, params in enumerate(dict_list, start=1)]
-
+    #'''
+    if os.path.exists(Output_Dir):
+        shutil.rmtree(Output_Dir)
+    
+    os.makedirs(Output_Dir, exist_ok=True)
+    
     with Pool() as pool:
         # Use imap_unordered so we can update progress as tasks complete
         results = []
@@ -193,5 +203,6 @@ if __name__ == "__main__":
             results.append(result)
 
     _, nrows = results[0]
-    
+
     print(f"Saved in {Output_Dir} with {total_files} sets of parameters and {nrows} of cross-sections each set")
+    #'''
