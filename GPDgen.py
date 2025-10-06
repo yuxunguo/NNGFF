@@ -162,14 +162,14 @@ def HGFF(xi, t, **kwargs):
 # ----- Example usage -----
 if __name__ == "__main__":
     
-    xi, t = 0.2, -1.0
+    xi, t = 0.3, -2.0
     Ag0 = 0.4
-    MAg = 1.6
+    MAg = 1.5
     Dg0 = -1.0
-    MDg = 1.0
-    HCFF = HCFF(xi, t, H_alpha=-0.2, H_beta=6.0, H_norm=Ag0, H_m=MAg, D1 = Dg0, mD1 = MDg)
-    ECFF = ECFF(xi, t, H_alpha=-0.2, H_beta=6.0, H_norm=Ag0, H_m=MAg, D1 = Dg0, mD1 = MDg)
-    AGFF, DGFF = HGFF(xi, t, H_alpha=-0.2, H_beta=6.0, H_norm=Ag0, H_m=MAg, D1 = Dg0, mD1 = MDg)
+    MDg = 2.0
+    HCFF = HCFF(xi, t, H_alpha=-1.0, H_beta=20.0, H_norm=Ag0, H_m=MAg, D1 = Dg0, mD1 = MDg)
+    ECFF = ECFF(xi, t, H_alpha=-1.0, H_beta=20.0, H_norm=Ag0, H_m=MAg, D1 = Dg0, mD1 = MDg)
+    AGFF, DGFF = HGFF(xi, t, H_alpha=-1.0, H_beta=20.0, H_norm=Ag0, H_m=MAg, D1 = Dg0, mD1 = MDg)
     
     print(HCFF)
     print(5/4*2*(AGFF+xi**2*DGFF)/xi**2)

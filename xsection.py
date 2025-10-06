@@ -117,7 +117,9 @@ def generate_GFF(dtGFF, params):
 def process_params(arg_tuple):
     
     i, params, extra_args, total_files = arg_tuple
-    
+    #EbMin = extra_args.get("EbMin")
+    #EbMax = extra_args.get("EbMax")
+    #nEb = extra_args.get("nEb")
     xsecpairs = extra_args.get("xsecpairs")
     dtGFF = extra_args.get("dtGFF")
     output_dir = extra_args.get("output_dir")
